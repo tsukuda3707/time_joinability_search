@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="m-5"></div>
+<div class="container">
+  <form action="/" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="inputFile">File input</label>
+      <div class="input-group">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" name="csv" id="inputFile" accept=".csv">
+          <label class="custom-file-label" for="inputFile" data-browse="参照">CSVファイルを選択</label>
+        </div>
+        <div class="input-group-append">
+          <button type="button" class="btn btn-outline-secondary input-group-text" id="inputFileReset">取消</button>
+        </div>
+      </div> 
+    </div>
+    <div class="form-group">
+      <div class="radio-inline">
+        <input type="radio" id="r1" name="radio" value="PTJ" checked>
+        <label for="r1">PTJ</label>
+        <input type="radio" id="r2" name="radio" value="NPTJ5">
+        <label for="r2">NPTJ5</label>
+        <input type="radio" id="r3" name="radio" value="NPTJ20">
+        <label for="r3">NPTJ20</label>
+        <input type="radio" id="r4" name="radio" value="NPTJ100">
+        <label for="r4">NPTJ100</label>
+      </div>
+    </div>
+    <div>
+      <button type="submit" class="m-1 btn btn-primary" style="width: 3cm;">Search</button>
+    </div>
+  </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+<script>
+  bsCustomFileInput.init();
+  document.getElementById('inputFileReset').addEventListener('click', function() {
+    var elem = document.getElementById('inputFile');
+    elem.value = '';
+    elem.dispatchEvent(new Event('change'));
+  });
+</script>
+<script>
+  const inputElem = document.getElementById('customRange1'); // input要素
+  const currentValueElem = document.getElementById('sl_value'); // 埋め込む先のspan要素
+
+  // 現在の値をspanに埋め込む関数
+  const setCurrentValue = (val) => {
+    currentValueElem.innerText = val;
+  }
+
+  // inputイベント時に値をセットする関数
+  const rangeOnChange = (e) =>{
+    setCurrentValue(e.target.value);
+  }
+
+  window.onload = () => {
+    inputElem.addEventListener('input', rangeOnChange); // スライダー変化時にイベントを発火
+    setCurrentValue(inputElem.value); // ページ読み込み時に値をセット
+  }
+</script>
+
+{% if data_dict %}
+<div class="m-5"></div>
+<div class="container">
+  <table class="table table-striped">
+    <tr>
+      <th>data</th>
+      <th>score</th>
+    </tr>
+    <tbody>
+      {% for key, value in data_dict %}
+      <tr>
+        <td>{{ key }}</td>
+        <td>{{ value }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% endblock %}
